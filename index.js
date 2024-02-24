@@ -5,19 +5,21 @@ require("dotenv").config();
 const port = process.env.port;
 const app = express();
 app.use(express.json());
-// console.log(process.env.OPENAI_API_KEY);
 const config = new Configuration({ apiKey: process.env.OPENAI_API_KEY });
 
 const openAi = new OpenAIApi(config);
 
 app.post("/generate", async (req, res) => {
   try {
+    const { prompt } = req.body;
     const response = await openAi.createCompletion({
       model: "text-davinci-003",
-      prompt: `Write a poem on the topic star 
-         ###
-        `,
-      max_tokens: 64,
+      prompt: `
+              ${prompt}
+              The time complexity of this function is
+              ###
+            `,
+      max_tokens: 2048,
       temperature: 0,
       top_p: 1.0,
       frequency_penalty: 0.0,
